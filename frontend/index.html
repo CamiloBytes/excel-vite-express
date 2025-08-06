@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Biblioteca</title>
+</head>
+
+<body>
+  <!-- Un título para la página -->
+  <h1>Cargar archivo</h1>
+  <form action="" id="fromExel">
+    <!-- Input donde el usuario puede seleccionar un archivo Excel -->
+    <input type="file" id="excelInput" accept=".xlsx, .xls" />
+    <!--Button para enviar el archivo cargado anteriormente-->
+    <button id="btnFrom">Enviar Datos</button>
+  </form>
+
+  <!-- Este script es el que maneja todo en el frontend -->
+  <!-- Usamos type="module" para poder usar import/export -->
+  <script type="module" src="./src/main.js"></script>
+</body>
+
+</html>

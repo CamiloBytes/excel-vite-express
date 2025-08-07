@@ -62,7 +62,7 @@ function leerExcel(archivo) {
       estados.add(fila["estado"]);
       
       prestamos.push({
-        identificacion_usuario: fila["identificacion"],
+        identificacion_usuario: fila["identificacion del usuario"],
         isbn_libro: fila["isbn"],
         estado_nombre: fila["estado"],
         fecha_prestamo: fila["fecha_prestamo"],

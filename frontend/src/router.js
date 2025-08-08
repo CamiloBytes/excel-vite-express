@@ -1,5 +1,6 @@
 import { renderHomePage } from './views/home.js'
 import { renderUploadPage } from './views/upload.js'
+import { renderUsersPage } from './views/users.js'
 
 function getRoute() {
   const hash = window.location.hash || '#/'
@@ -14,6 +15,9 @@ function renderCurrentRoute() {
   switch (route) {
     case 'upload':
       renderUploadPage(app)
+      break
+    case 'users':
+      renderUsersPage(app)
       break
     case '':
     case 'home':

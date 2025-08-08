@@ -38,5 +38,18 @@ router.post('/', async (req, res) => {
     }
 })
 
+// Nueva ruta GET: lista todos los usuarios
+router.get('/', async (req, res) => {
+    try {
+        const [rows] = await db.promise().query(
+            'SELECT id_usuario, nombre, identificacion, correo, telefono, created_at, updated_at FROM usuarios ORDER BY id_usuario DESC'
+        )
+        res.status(200).json(rows)
+    } catch (error) {
+        console.error(' Error obteniendo usuarios:', error.message)
+        res.status(500).json({ error: 'Error al obtener usuarios' })
+    }
+})
+
 // Exportamos el router para usarlo en el index.js
 export default router

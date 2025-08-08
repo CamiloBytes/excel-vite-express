@@ -122,5 +122,45 @@ router.post('/', async (req, res) => {
   }
 })
 
+router.get('/', async (req, res) => {
+  try {
+    const [prestamos] = await db.promise().query(`
+    SELECT 
+      prestamo.id_prestamo AS id_del_prestamo,
+      usuario.nombre AS nombre_completo_usuario,
+      usuario.identificacion AS documento_identificacion,
+      usuario.correo AS email_usuario,
+      usuario.telefono AS telefono_contacto,
+      libro.titulo AS titulo_del_libro,
+      libro.isbn AS codigo_isbn,
+      libro.año_publicacion AS año_de_publicacion,
+      libro.autor AS autor_del_libro,
+      prestamo.fecha_prestamo AS fecha_de_prestamo,
+      prestamo.fecha_devolucion AS fecha_de_devolucion,
+      estado.nombre_estado AS estado_del_prestamo,
+      prestamo.created_at AS fecha_creacion_registro,
+      prestamo.updated_at AS fecha_ultima_actualizacion
+    FROM prestamos prestamo
+    INNER JOIN usuarios usuario ON prestamo.id_usuario = usuario.id_usuario
+    INNER JOIN libros libro ON prestamo.id_libro = libro.id_libro
+    INNER JOIN estados estado ON prestamo.id_estado = estado.id_estado
+    ORDER BY usuario.id_usuario ASC;
+    `);
+
+    res.status(200).json({
+      mensaje: 'Lista de préstamos obtenida exitosamente',
+      total_prestamos: prestamos.length,
+      prestamos_encontrados: prestamos
+    });
+
+  } catch (error) {
+    console.error('Error al consultar los préstamos:', error);
+    res.status(500).json({ 
+      error: 'Error interno del servidor al obtener préstamos',
+      detalle_tecnico: error.message 
+    });
+  }
+});
+
 export default router
   

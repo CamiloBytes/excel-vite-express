@@ -98,3 +98,11 @@ async function enviarDatos(url, datos) {
     console.error(`Error al enviar datos a ${url}:`, error);
   }
 }
+
+async function getPrestamos() {
+  try {
+    
+  } catch (error) {
+    
+  }
+}

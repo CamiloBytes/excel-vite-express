@@ -92,9 +92,24 @@ async function enviarDatos(url, datos) {
       body: JSON.stringify(datos)
     });
 
-    const resultado = await respuesta.json();
-    console.log(`${url} enviado correctamente:`, resultado);
+    const contenido = await respuesta.json().catch(() => ({}))
+
+    if (!respuesta.ok) {
+      console.error(`Error ${respuesta.status} al enviar a ${url}:`, contenido)
+      throw new Error(contenido?.error || `Fallo en ${url}`)
+    }
+
+    // Log más claro por endpoint
+    if (url === '/api/prestamos') {
+      console.log(`${url} OK:`, contenido)
+    } else {
+      console.log(`${url} enviado correctamente:`, contenido)
+    }
+
+    return contenido
   } catch (error) {
     console.error(`Error al enviar datos a ${url}:`, error);
+    alert(`Fallo al enviar a ${url}: ${error.message}`)
+    throw error
   }
 }

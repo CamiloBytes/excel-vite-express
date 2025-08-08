@@ -8,17 +8,12 @@
 </head>
 
 <body>
-  <!-- Un título para la página -->
-  <h1>Cargar archivo</h1>
-  <form action="" id="fromExel">
-    <!-- Input donde el usuario puede seleccionar un archivo Excel -->
-    <input type="file" id="excelInput" accept=".xlsx, .xls" />
-    <!--Button para enviar el archivo cargado anteriormente-->
-    <button id="btnFrom">Enviar Datos</button>
-  </form>
+  <nav>
+    <a href="#/">Home</a>
+    <a href="#/upload" style="margin-left: 12px;">Cargar</a>
+  </nav>
+  <div id="app"></div>
 
-  <!-- Este script es el que maneja todo en el frontend -->
-  <!-- Usamos type="module" para poder usar import/export -->
   <script type="module" src="./src/main.js"></script>
 </body>
 

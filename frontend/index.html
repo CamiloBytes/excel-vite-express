@@ -10,12 +10,28 @@
 
 <body>
   <nav>
-    <a href="#/">Home</a>
-    <a href="#/upload" style="margin-left: 12px;">Cargar</a>
-    <a href="#/users" style="margin-left: 12px;">Usuarios</a>
+    <button data-nav="home">Home</button>
+    <button data-nav="upload">Cargar</button>
+    <button data-nav="users">Usuarios</button>
+    <button data-nav="prestamos">Préstamos</button>
   </nav>
   <div id="app"></div>
 
+  <script>
+    // Navegación simple con botones -> hash routing
+    addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('nav [data-nav]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const target = btn.getAttribute('data-nav')
+          if (!target || target === 'home') {
+            location.hash = '#/'
+          } else {
+            location.hash = `#/${target}`
+          }
+        })
+      })
+    })
+  </script>
   <script type="module" src="./src/main.js"></script>
 </body>
 

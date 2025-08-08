@@ -122,5 +122,36 @@ router.post('/', async (req, res) => {
   }
 })
 
+// Ruta GET: lista préstamos con datos relacionados
+router.get('/', async (_req, res) => {
+  try {
+    const [rows] = await db.promise().query(
+      `SELECT 
+         p.id_prestamo,
+         p.fecha_prestamo,
+         p.fecha_devolucion,
+         p.created_at,
+         p.updated_at,
+         u.id_usuario,
+         u.nombre AS usuario_nombre,
+         u.identificacion AS usuario_identificacion,
+         l.id_libro,
+         l.titulo AS libro_titulo,
+         l.isbn AS libro_isbn,
+         e.id_estado,
+         e.nombre_estado AS estado
+       FROM prestamos p
+       LEFT JOIN usuarios u ON p.id_usuario = u.id_usuario
+       LEFT JOIN libros l ON p.id_libro = l.id_libro
+       LEFT JOIN estados e ON p.id_estado = e.id_estado
+       ORDER BY p.id_prestamo DESC`
+    )
+    res.status(200).json(rows)
+  } catch (error) {
+    console.error('Error obteniendo préstamos:', error)
+    res.status(500).json({ error: 'Error al obtener préstamos' })
+  }
+})
+
 export default router
   

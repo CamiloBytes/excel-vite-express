@@ -1,5 +1,7 @@
 // Importamos la librería xlsx para poder leer archivos Excel
 import * as XLSX from 'xlsx';
+import axios from 'axios'
+import { traerDatos } from './js/views';
 
 // Variable para guardar el archivo seleccionado por el usuario
 let archivoSeleccionado = null;
@@ -75,6 +77,8 @@ function leerExcel(archivo) {
     await enviarDatos('/api/libros', libros);
     await enviarDatos('/api/estados', Array.from(estados));
     await enviarDatos('/api/prestamos', prestamos);
+
+    traerDatos();
   };
 
   // Iniciamos la lectura del archivo como ArrayBuffer
@@ -84,25 +88,12 @@ function leerExcel(archivo) {
 // Función para enviar datos al servidor mediante fetch
 async function enviarDatos(url, datos) {
   try {
-    const respuesta = await fetch(`http://localhost:3000${url}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(datos)
-    });
+    const dataSend = await axios.post(`http://localhost:3000${url}`, datos)
 
-    const resultado = await respuesta.json();
-    console.log(`${url} enviado correctamente:`, resultado);
+    console.log(`${url} enviado correctamente:`, dataSend);
   } catch (error) {
     console.error(`Error al enviar datos a ${url}:`, error);
   }
 }
 
-async function getPrestamos() {
-  try {
-    
-  } catch (error) {
-    
-  }
-}
+document.addEventListener("DOMContentLoaded", traerDatos());

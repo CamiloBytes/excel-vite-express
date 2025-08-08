@@ -1,0 +1,1 @@
+export const endPointPrestamo = "http://localhost:3000/api/prestamos"

@@ -16,7 +16,31 @@
     <!--Button para enviar el archivo cargado anteriormente-->
     <button id="btnFrom">Enviar Datos</button>
   </form>
-
+  <!--TABLA DONDE SE CARGAN LOS DATOS DEL BACKEND-->
+  <table border="1">
+    <thead>
+      <tr>
+        <th>ID Préstamo</th>
+        <th>Nombre Usuario</th>
+        <th>Identificación</th>
+        <th>Email</th>
+        <th>Teléfono</th>
+        <th>Título del Libro</th>
+        <th>ISBN</th>
+        <th>Año Publicación</th>
+        <th>Autor</th>
+        <th>Fecha Préstamo</th>
+        <th>Fecha Devolución</th>
+        <th>Estado</th>
+        <th>Fecha Creación</th>
+        <th>Última Actualización</th>
+      </tr>
+    </thead>
+    <tbody id="tabla-prestamos">
+      <!-- Aquí van las filas -->
+    </tbody>
+  </table>
+  
   <!-- Este script es el que maneja todo en el frontend -->
   <!-- Usamos type="module" para poder usar import/export -->
   <script type="module" src="./src/main.js"></script>

@@ -33,13 +33,11 @@ function normalizeDateInput(input) {
   return null
 }
 
-// Ruta para insertar uno o varios préstamos
 router.post('/', async (req, res) => {
   try {
     const prestamos = Array.isArray(req.body) ? req.body : [req.body]
 
-    const errores = []
-    let insertados = 0
+    let insertados = 0 // Contador de préstamos que sí se insertan
 
     for (const [indice, prestamo] of prestamos.entries()) {
       const {
@@ -50,72 +48,82 @@ router.post('/', async (req, res) => {
         fecha_devolucion
       } = prestamo || {}
 
-      // Validación básica de campos requeridos
+      // Validación básica: campos obligatorios
       if (!identificacion_usuario || !isbn_libro || !estado_nombre) {
-        errores.push({
-          indice,
-          error: 'Faltan campos requeridos',
-          detalle: { identificacion_usuario, isbn_libro, estado_nombre }
-        })
+        console.error(`Fila ${indice}: Faltan campos requeridos`)
         continue
       }
 
-      // Resolvemos IDs relacionados
+      // Buscar ID del usuario
       const [usuario] = await db.promise().query(
         'SELECT id_usuario FROM usuarios WHERE identificacion = ?',
         [identificacion_usuario]
       )
       if (usuario.length === 0) {
-        errores.push({ indice, error: 'Usuario no encontrado', identificacion_usuario })
+        console.error(`Fila ${indice}: Usuario no encontrado (${identificacion_usuario})`)
         continue
       }
 
+      // Buscar ID del libro
       const [libro] = await db.promise().query(
         'SELECT id_libro FROM libros WHERE isbn = ?',
         [isbn_libro]
       )
       if (libro.length === 0) {
-        errores.push({ indice, error: 'Libro no encontrado', isbn_libro })
+        console.error(`Fila ${indice}: Libro no encontrado (${isbn_libro})`)
         continue
       }
 
+      // Buscar ID del estado
       const [estado] = await db.promise().query(
         'SELECT id_estado FROM estados WHERE nombre_estado = ?',
         [estado_nombre]
       )
       if (estado.length === 0) {
-        errores.push({ indice, error: 'Estado no encontrado', estado_nombre })
+        console.error(`Fila ${indice}: Estado no encontrado (${estado_nombre})`)
         continue
       }
 
-      // Normalizamos fechas (acepta seriales de Excel o strings)
+      // Normalizamos las fechas
       const fechaPrestamoISO = normalizeDateInput(fecha_prestamo)
       const fechaDevolucionISO = normalizeDateInput(fecha_devolucion)
 
-      // Insertamos el préstamo
-      await db.promise().query(
-        `INSERT INTO prestamos (
-          id_usuario, id_libro, id_estado, fecha_prestamo, fecha_devolucion
-        ) VALUES (?, ?, ?, ?, ?)`,
-        [
-          usuario[0].id_usuario,
-          libro[0].id_libro,
-          estado[0].id_estado,
-          fechaPrestamoISO,
-          fechaDevolucionISO
-        ]
+      // Comprobar si ya existe ese préstamo (mismo usuario, libro y fecha)
+      const [prestamoExistente] = await db.promise().query(
+        `SELECT id_prestamo 
+         FROM prestamos 
+         WHERE id_usuario = ? 
+           AND id_libro = ? 
+           AND fecha_prestamo = ?`,
+        [usuario[0].id_usuario, libro[0].id_libro, fechaPrestamoISO]
       )
 
-      insertados += 1
+      if (prestamoExistente.length === 0) {
+        // Si NO existe → lo insertamos
+        await db.promise().query(
+          `INSERT INTO prestamos (
+            id_usuario, id_libro, id_estado, fecha_prestamo, fecha_devolucion
+          ) VALUES (?, ?, ?, ?, ?)`,
+          [
+            usuario[0].id_usuario,
+            libro[0].id_libro,
+            estado[0].id_estado,
+            fechaPrestamoISO,
+            fechaDevolucionISO
+          ]
+        )
+        insertados++
+      } else {
+        // Si ya existe → solo mostramos el error en consola y no insertamos
+        console.error(`Fila ${indice}: Préstamo duplicado → Usuario ${identificacion_usuario}, Libro ${isbn_libro}, Fecha ${fechaPrestamoISO}`)
+      }
     }
 
-    // Si todos fallaron, retornamos 400 con detalle
-    if (insertados === 0 && errores.length > 0) {
-      return res.status(400).json({ error: 'No se insertaron préstamos', errores })
-    }
+    return res.status(201).json({
+      mensaje: 'Proceso completado',
+      insertados
+    })
 
-    // Respondemos con resumen (multi-resultado)
-    return res.status(201).json({ mensaje: 'Préstamos procesados', insertados, errores })
   } catch (error) {
     console.error('Error al insertar el préstamo:', error)
     res.status(500).json({ error: 'Error interno del servidor' })

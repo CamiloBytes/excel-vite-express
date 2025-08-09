@@ -3,27 +3,21 @@ import axios from "axios";
 
 export async function traerDatos() {
     try {
-        // Llamo a la api
+        // Llamo a la API
         const { data } = await axios.get(endPointPrestamo);
 
-        // Obtengo los arrays del backend
         const prestamos = data.prestamos_encontrados;
 
-        // Verifico que realmente sea un array
         if (!Array.isArray(prestamos)) {
             console.error("El backend no devolvió un array válido:", prestamos);
             return;
         }
 
-        console.log(prestamos); // Compruebo em consola
+        console.log(prestamos); // Verificación en consola
 
-        // Seleccionamos el tbody de la tabla
         const tabla = document.getElementById('tabla-prestamos');
+        tabla.innerHTML = ''; // Limpio tabla
 
-        // Limpiamos cualquier dato previo
-        tabla.innerHTML = '';
-
-        // Recorro e inserto cada préstamo en la tabla
         prestamos.forEach(prestamo => {
             const fila = document.createElement('tr');
 
@@ -40,11 +34,41 @@ export async function traerDatos() {
                 <td>${prestamo.fecha_de_prestamo}</td>
                 <td>${prestamo.fecha_de_devolucion}</td>
                 <td>${prestamo.estado_del_prestamo}</td>
-                <td>${prestamo.fecha_creacion_registro}</td>
-                <td>${prestamo.fecha_ultima_actualizacion}</td>
+                <td><button class="btn-eliminar" data-id="${prestamo.id_del_prestamo}">Eliminar</button></td>
+                <td><button class="btn-actualizar" data-id="${prestamo.id_del_prestamo}">Actualizar</button></td>
             `;
 
             tabla.appendChild(fila);
+        });
+
+        // Botones Eliminar
+        document.querySelectorAll('.btn-eliminar').forEach(boton => {
+            boton.addEventListener('click', async () => {
+                const id = boton.dataset.id; // Tomo el ID desde data-id
+                if (confirm(`¿Seguro que quieres eliminar el préstamo #${id}?`)) {
+                    try {
+                        await axios.delete(`${endPointPrestamo}/${id}`);
+                        console.log(`Préstamo con ID ${id} eliminado`);
+                        traerDatos(); // Recargar tabla
+                    } catch (error) {
+                        console.error('Error al eliminar préstamo:', error.message);
+                    }
+                }
+            });
+        });
+
+        // Botones Actualizar
+        document.querySelectorAll('.btn-actualizar').forEach(boton => {
+            boton.addEventListener('click', async () => {
+                const id = boton.dataset.id;
+                try {
+                    await axios.put(`${endPointPrestamo}/${id}`, { estado_del_prestamo: "Devuelto" });
+                    console.log(`Préstamo con ID ${id} actualizado`);
+                    traerDatos();
+                } catch (error) {
+                    console.error('Error al actualizar préstamo:', error.message);
+                }
+            });
         });
 
     } catch (error) {

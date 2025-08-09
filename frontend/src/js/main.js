@@ -1,7 +1,13 @@
 // Importamos la librería xlsx para poder leer archivos Excel
 import * as XLSX from 'xlsx';
-import axios from 'axios'
-import { traerDatos } from './js/views';
+import axios from 'axios';
+import { router } from './router.js'
+
+
+// Initialize router when DOM is fully loaded
+window.addEventListener('DOMContentLoaded', router);
+// Handle route changes when user navigates using hash
+window.addEventListener('hashchange', router);
 
 // Variable para guardar el archivo seleccionado por el usuario
 let archivoSeleccionado = null;

@@ -1,5 +1,37 @@
-import { endPointPrestamo } from "./endpoint";
+import { endPointPrestamo, endPointUsuarios } from "./endpoint";
 import axios from "axios";
+
+export function home (){
+    const home = document.getElementById('app')
+
+}
+
+export async function traerUsuarios() {
+    try {
+        const {data} = await axios.get(endPointUsuarios)
+        const ususarios = data.usuarios_encontrados
+
+        if(Array.isArray(ususarios)){
+            console.error('El backend no delvolvio un array valido');
+            return
+        }
+        console.log(ususarios);
+
+        const tabla = document.getElementById('tabla')
+
+        ususarios.forEach(usuario=> {
+            const fila = document.createElement('tr')
+
+            fila.innerHTML=`
+            
+            `
+        })
+        
+        
+    } catch (error) {
+        
+    }
+}
 
 export async function traerDatos() {
     try {
@@ -15,7 +47,7 @@ export async function traerDatos() {
 
         console.log(prestamos); // Verificación en consola
 
-        const tabla = document.getElementById('tabla-prestamos');
+        const tabla = document.getElementById('tabla');
         tabla.innerHTML = ''; // Limpio tabla
 
         prestamos.forEach(prestamo => {

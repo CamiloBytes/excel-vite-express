@@ -38,5 +38,25 @@ router.post('/', async (req, res) => {
     }
 })
 
+router.get ('/', async (req,res)=>{
+    try {
+        const usuarios = await db.promise.query(
+            'SELECT * FROM usuarios'
+        )
+
+        res.status(200).json({
+        mensaje: 'Lista de préstamos obtenida exitosamente',
+        total_usuarios: usuarios.length,
+        usuarios_encontrados: usuarios
+    });
+    } catch (error) {
+        console.error('Error al consultar los préstamos:', error);
+        res.status(500).json({ 
+        error: 'Error interno del servidor al obtener préstamos',
+        detalle_tecnico: error.message 
+    });
+    }
+})
+
 // Exportamos el router para usarlo en el index.js
 export default router

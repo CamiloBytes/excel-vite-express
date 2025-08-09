@@ -194,6 +194,30 @@ router.delete('/:id', async (req, res) => {
   }
 });
 
+router.put('/:id', async (req, res) => {
+  const { id } = req.params;
+  // verifico si me esta enviando el id para enviarlo
+  if (!id) return res.status(400).json({ error: 'ID requerido' });
+
+  try {
+    const [result] = await db.promise().query(
+      `UPDATE prestamos 
+       SET id_estado = ?, fecha_devolucion = ? 
+       WHERE id_prestamo = ?`
+      [id]
+    );
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: 'Préstamo no encontrado' });
+    }
+
+    res.json({ mensaje: 'Préstamo eliminado correctamente' });
+  } catch (error) {
+    console.error('Error al eliminar préstamo:', error);
+    res.status(500).json({ error: 'Error del servidor' });
+  }
+});
+
 
 
 export default router

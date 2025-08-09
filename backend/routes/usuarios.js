@@ -38,23 +38,20 @@ router.post('/', async (req, res) => {
     }
 })
 
-router.get ('/', async (req,res)=>{
+// Nueva ruta GET: lista todos los usuarios
+router.get('/', async (req, res) => {
     try {
-        const usuarios = await db.promise.query(
-            'SELECT * FROM usuarios'
+        const [usuarios] = await db.promise().query(
+            'SELECT id_usuario, nombre, identificacion, correo, telefono, created_at, updated_at FROM usuarios ORDER BY id_usuario DESC'
         )
-
         res.status(200).json({
-        mensaje: 'Lista de préstamos obtenida exitosamente',
+        mensaje: 'Lista de usuarios obtenida exitosamente',
         total_usuarios: usuarios.length,
         usuarios_encontrados: usuarios
-    });
+    })
     } catch (error) {
-        console.error('Error al consultar los préstamos:', error);
-        res.status(500).json({ 
-        error: 'Error interno del servidor al obtener préstamos',
-        detalle_tecnico: error.message 
-    });
+        console.error(' Error obteniendo usuarios:', error.message)
+        res.status(500).json({ error: 'Error al obtener usuarios' })
     }
 })
 

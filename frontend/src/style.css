@@ -1,0 +1,214 @@
+/* Reset básico */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  /* Estilos del body */
+  body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    color: #333;
+    background-color: #f5f5f5;
+    padding: 20px;
+  }
+  
+  /* Título principal */
+  h1 {
+    text-align: center;
+    margin-bottom: 30px;
+    color: #2c3e50;
+    font-size: 2rem;
+    font-weight: normal;
+  }
+  
+  /* Formulario de carga */
+  #fromExel {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    margin-bottom: 30px;
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  /* Input de archivo */
+  #excelInput {
+    width: 100%;
+    padding: 10px;
+    border: 2px dashed #ddd;
+    border-radius: 4px;
+    margin-bottom: 15px;
+    background-color: #fafafa;
+    cursor: pointer;
+  }
+  
+  #excelInput:hover {
+    border-color: #bbb;
+  }
+  
+  /* Botón de envío */
+  #btnFrom {
+    background-color: #3498db;
+    color: white;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    width: 100%;
+    transition: background-color 0.3s;
+  }
+  
+  #btnFrom:hover {
+    background-color: #2980b9;
+  }
+  
+  #btnFrom:active {
+    transform: translateY(1px);
+  }
+  
+  /* Contenedor de la tabla */
+  table {
+    width: 100%;
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    border-collapse: collapse;
+  }
+  
+  /* Encabezados de la tabla */
+  th {
+    background-color: #34495e;
+    color: white;
+    padding: 15px 10px;
+    text-align: left;
+    font-weight: normal;
+    font-size: 14px;
+  }
+  
+  /* Celdas de la tabla */
+  td {
+    padding: 12px 10px;
+    border-bottom: 1px solid #eee;
+    font-size: 14px;
+  }
+  
+  /* Filas alternadas */
+  tbody tr:nth-child(even) {
+    background-color: #f8f9fa;
+  }
+  
+  /* Hover en filas */
+  tbody tr:hover {
+    background-color: #e8f4f8;
+  }
+  
+  /* Botones de acción */
+  .btn-eliminar,
+  .btn-actualizar {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+    transition: all 0.3s;
+  }
+  
+  .btn-eliminar {
+    background-color: #e74c3c;
+    color: white;
+    margin-right: 5px;
+  }
+  
+  .btn-eliminar:hover {
+    background-color: #c0392b;
+  }
+  
+  .btn-actualizar {
+    background-color: #27ae60;
+    color: white;
+  }
+  
+  .btn-actualizar:hover {
+    background-color: #229954;
+  }
+  
+  /* Responsivo para móviles */
+  @media (max-width: 768px) {
+    body {
+      padding: 10px;
+    }
+    
+    h1 {
+      font-size: 1.5rem;
+      margin-bottom: 20px;
+    }
+    
+    #fromExel {
+      padding: 15px;
+    }
+    
+    table {
+      font-size: 12px;
+    }
+    
+    th, td {
+      padding: 8px 5px;
+    }
+    
+    .btn-eliminar,
+    .btn-actualizar {
+      padding: 6px 12px;
+      font-size: 11px;
+    }
+  }
+  
+  /* Scroll horizontal para tabla en móviles */
+  @media (max-width: 480px) {
+    table {
+      display: block;
+      overflow-x: auto;
+      white-space: nowrap;
+    }
+    
+    thead, tbody, th, td, tr {
+      display: block;
+    }
+    
+    thead tr {
+      position: absolute;
+      top: -9999px;
+      left: -9999px;
+    }
+    
+    tr {
+      border: 1px solid #ccc;
+      margin-bottom: 10px;
+      padding: 10px;
+      border-radius: 4px;
+      background: white;
+    }
+    
+    td {
+      border: none;
+      position: relative;
+      padding-left: 50% !important;
+      white-space: normal;
+      text-align: right;
+    }
+    
+    td:before {
+      content: attr(data-label) ": ";
+      position: absolute;
+      left: 6px;
+      width: 45%;
+      text-align: left;
+      font-weight: bold;
+      color: #2c3e50;
+    }
+  }

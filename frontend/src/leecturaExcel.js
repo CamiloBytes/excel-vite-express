@@ -22,7 +22,11 @@ async function enviarDatos(url, datos) {
 
   if (!respuesta.ok) {
     console.error(`Error ${respuesta.status} al enviar a ${url}:`, contenido)
-    alert(`Fallo al enviar a ${url}: ${contenido?.error || 'Error'}`)
+    Swal.fire({
+      icon: 'error',
+      title: 'Error',
+      text: `Fallo al enviar a ${url}: ${contenido?.error || 'Error'}`,
+    })
     throw new Error(contenido?.error || `Fallo en ${url}`)
   }
 
@@ -73,5 +77,13 @@ export async function leerExcelYEnviar(archivo) {
   await enviarDatos('/api/libros', libros)
   await enviarDatos('/api/estados', Array.from(estados))
   const resultadoPrestamos = await enviarDatos('/api/prestamos', prestamos)
+
+  Swal.fire({
+    icon: 'success',
+    title: 'Carga finalizada',
+    html: `Préstamos insertados: <b>${resultadoPrestamos?.insertados ?? 0}</b><br/>` +
+          (resultadoPrestamos?.errores?.length ? `Errores: <b>${resultadoPrestamos.errores.length}</b>` : 'Sin errores'),
+  })
+
   return resultadoPrestamos
 }

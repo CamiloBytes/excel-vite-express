@@ -18,13 +18,12 @@ export function renderUploadPage(container) {
     e.preventDefault()
     const archivoSeleccionado = inputArchivo.files?.[0]
     if (!archivoSeleccionado) {
-      alert('Por favor selecciona un archivo Excel antes de enviarlo.')
+      Swal.fire({ icon: 'warning', title: 'Selecciona un archivo', text: 'Por favor selecciona un archivo Excel antes de enviarlo.' })
       return
     }
     try {
       const resumen = await leerExcelYEnviar(archivoSeleccionado)
       console.log('Resumen préstamos:', resumen)
-      alert('Carga finalizada')
     } catch (err) {
       // Los errores ya se informan desde la utilidad
     }

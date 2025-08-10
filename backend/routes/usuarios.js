@@ -67,13 +67,19 @@ router.delete('/:id', async (req, res) => {
       [id]
     );
 
-    if (result.affectedRows === 0) {
-      return res.status(404).json({ error: 'Préstamo no encontrado' });
+    // Reiniciar el contador AUTO_INCREMENT si la tabla está vacía
+    const [rows] = await db.promise().query('SELECT COUNT(*) AS total FROM usuarios');
+    if (rows[0].total === 0) {
+      await db.promise().query('ALTER TABLE usuarios AUTO_INCREMENT = 1');
     }
 
-    res.json({ mensaje: 'Préstamo eliminado correctamente' });
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: 'Usuario no encontrado' });
+    }
+
+    res.json({ mensaje: 'Usuario eliminado correctamente' });
   } catch (error) {
-    console.error('Error al eliminar préstamo:', error);
+    console.error('Error al eliminar usuario:', error);
     res.status(500).json({ error: 'Error del servidor' });
   }
 });

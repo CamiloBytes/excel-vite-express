@@ -183,6 +183,12 @@ router.delete('/:id', async (req, res) => {
       [id]
     );
 
+    // Reiniciar el contador AUTO_INCREMENT si la tabla está vacía
+    const [rows] = await db.promise().query('SELECT COUNT(*) AS total FROM prestamos');
+    if (rows[0].total === 0) {
+      await db.promise().query('ALTER TABLE prestamos AUTO_INCREMENT = 1');
+    }
+
     if (result.affectedRows === 0) {
       return res.status(404).json({ error: 'Préstamo no encontrado' });
     }

@@ -1,6 +1,7 @@
 // Importamos la librería xlsx para poder leer archivos Excel
 import * as XLSX from 'xlsx';
 import axios from 'axios';
+import { alertaExcelError, alertaExcelExito } from './alert';
 
 
 
@@ -29,22 +30,24 @@ export function leerExcel(archivo) {
 
     // Recorremos cada fila del Excel
     datosJSON.forEach(fila => {
+      // agrego los usuarios al arreiglo usuarios
       usuarios.push({
         nombre: fila["nombre del usuario"],
         identificacion: fila["identificacion del usuario"],
         correo: fila["correo"],
         telefono: fila["telefono"]
       });
-
+      // agrego los libros al arreiglo libros
       libros.push({
         titulo: fila["titulo"],
         isbn: fila["isbn"],
         año_publicacion: parseInt(fila["año de publicacion"]),
         autor: fila["autor"]
       });
-
+      // Agrego los estados al Set para evitar duplicados
       estados.add(fila["estado"]);
       
+      // agrego los datos al arreiglo de los prestamos
       prestamos.push({
         identificacion_usuario: fila["identificacion del usuario"],
         isbn_libro: fila["isbn"],
@@ -53,12 +56,27 @@ export function leerExcel(archivo) {
         fecha_devolucion: fila["fecha_devolucion"]
       });
     });
-
-    // Enviamos los datos a los endpoints del backend
-    await enviarDatos('/api/usuarios', usuarios);
-    await enviarDatos('/api/libros', libros);
-    await enviarDatos('/api/estados', Array.from(estados));
-    await enviarDatos('/api/prestamos', prestamos);
+    let error = false;
+    try {
+       // Enviamos los datos a los endpoints del backend
+      // endpoint de usuarios
+      await enviarDatos('/api/usuarios', usuarios);
+      // endpoint de libros
+      await enviarDatos('/api/libros', libros);
+      // endpoint de estados, convertimos el Set a un Array
+      await enviarDatos('/api/estados', Array.from(estados));
+      // endpoint de prestamos
+      await enviarDatos('/api/prestamos', prestamos);
+    } catch (error) {
+      error = true;
+    }
+    // Mostramos alerta de éxito o error
+    // Dependiendo de si hubo un error al enviar los datos 
+    if (error) {
+      alertaExcelError('Excel');
+    } else {
+      alertaExcelExito('Excel');
+    }
 
   };
 
@@ -70,7 +88,6 @@ export function leerExcel(archivo) {
 async function enviarDatos(url, datos) {
   try {
     const dataSend = await axios.post(`http://localhost:3000${url}`, datos)
-
     console.log(`${url} enviado correctamente:`, dataSend);
   } catch (error) {
     console.error(`Error al enviar datos a ${url}:`, error);

@@ -2,7 +2,9 @@ import { endPointPrestamo, endPointUsuarios } from "./endpoint";
 import axios from "axios";
 import { router } from "./router";
 import { leerExcel } from "./leerexcel";
+import Swal from "sweetalert2";
 
+// Esta función renderiza la vista de inicio
 export function home() {
     const home = document.getElementById('app')
     home.innerHTML = `
@@ -39,13 +41,15 @@ export function home() {
         alert('Por favor selecciona un archivo Excel antes de enviarlo.')
         return
       }
-    
+      // llamo a la funcion leerExcel para procesar el archivo 
       leerExcel(archivoSeleccionado)
     })
 
+    // Selecciono los botones del menú
     const btnInicio = document.getElementById('btn-inicio');
     const btnPrestamos = document.getElementById('btn-prestamos');
     const btnUsuarios = document.getElementById('btn-usuarios');
+    // escucho los eventos para cambiar de vista
     btnInicio.addEventListener('click', (e) => {
         e.preventDefault();
         history.pushState({}, '', '/');
@@ -101,6 +105,7 @@ export function renderUsersPage(e) {
     const btnRecargar = app.querySelector('#btn-recargar')
     const btnInicio = app.querySelector('#btn-inicio');
     const btnPrestamos = app.querySelector('#btn-prestamos');
+    
     btnInicio.addEventListener('click', (e) => {
         e.preventDefault();
         history.pushState({}, '', '/');
@@ -142,17 +147,28 @@ export function renderUsersPage(e) {
             })
 
             document.querySelectorAll('.btn-eliminar').forEach(boton => {
-                boton.addEventListener('click', async () => {
-                    const id = boton.dataset.id; // Tomo el ID desde data-id
-                    if (confirm(`¿Seguro que quieres eliminar el préstamo #${id}?`)) {
-                        try {
-                            await axios.delete(`${endPointUsuarios}/${id}`);
-                            console.log(`Préstamo con ID ${id} eliminado`);
-                            cargarUsuarios(); // Recargar tabla
-                        } catch (error) {
-                            console.error('Error al eliminar préstamo:', error.message);
+                boton.addEventListener('click', async (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    const id = boton.dataset.id;
+                    Swal.fire({
+                        title: `¿Seguro que quieres eliminar el usuario #${id}?`,
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonText: 'Sí, eliminar',
+                        cancelButtonText: 'Cancelar'
+                    }).then(async (result) => {
+                        if (result.isConfirmed) {
+                            try {
+                                await axios.delete(`${endPointUsuarios}/${id}`);
+                                Swal.fire('Eliminado', `Usuario con ID ${id} eliminado correctamente.`, 'success');
+                                boton.closest('tr').remove();
+                            } catch (error) {
+                                Swal.fire('Error', 'No se pudo eliminar el usuario.', 'error');
+                                console.error('Error al eliminar usuario:', error.message);
+                            }
                         }
-                    }
+                    });
                 });
             });
 
@@ -279,18 +295,29 @@ export function renderPrestamos(e) {
             });
 
             // Botones Eliminar
-            document.querySelectorAll('.btn-eliminar').forEach(boton => {
-                boton.addEventListener('click', async () => {
-                    const id = boton.dataset.id; // Tomo el ID desde data-id
-                    if (confirm(`¿Seguro que quieres eliminar el préstamo #${id}?`)) {
-                        try {
-                            await axios.delete(`${endPointPrestamo}/${id}`);
-                            console.log(`Préstamo con ID ${id} eliminado`);
-                            cargarPrestamos(); // Recargar tabla
-                        } catch (error) {
-                            console.error('Error al eliminar préstamo:', error.message);
+           document.querySelectorAll('.btn-eliminar').forEach(boton => {
+                boton.addEventListener('click', async (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    const id = boton.dataset.id;
+                    Swal.fire({
+                        title: `¿Seguro que quieres eliminar el usuario #${id}?`,
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonText: 'Sí, eliminar',
+                        cancelButtonText: 'Cancelar'
+                    }).then(async (result) => {
+                        if (result.isConfirmed) {
+                            try {
+                                await axios.delete(`${endPointPrestamo}/${id}`);
+                                Swal.fire('Eliminado', `Usuario con ID ${id} eliminado correctamente.`, 'success');
+                                boton.closest('tr').remove();
+                            } catch (error) {
+                                Swal.fire('Error', 'No se pudo eliminar el usuario.', 'error');
+                                console.error('Error al eliminar usuario:', error.message);
+                            }
                         }
-                    }
+                    });
                 });
             });
 

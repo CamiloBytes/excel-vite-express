@@ -3,15 +3,14 @@ import mysql from 'mysql2'
 
 //  Creamos la conexión a la base de datos Clever Cloud
 const db = mysql.createPool({
-    host: 'ba5rgjivhubweomt5cwb-mysql.services.clever-cloud.com',
-    user: 'uzxp16mr7s5cizkx',
-    password: 'pRKtFIkcXSbGbJww3zSf',
-    database: 'ba5rgjivhubweomt5cwb',
-    port: 3306,
-    connectionLimit: 10,
-    waitForConnections: true,
-    queueLimit: 0,
-    ssl: { rejectUnauthorized: false }
+    host:'localhost',
+    user:'root',
+    password:'Qwe.123*',
+    database:'prestamos_biblioteca',
+    port:3306,
+    connectionLimit:10,
+    multipleStatements:true,
+    queueLimit: 0
 })
 
 

@@ -42,7 +42,7 @@ router.post('/', async (req, res) => {
 router.get('/', async (req, res) => {
     try {
         const [usuarios] = await db.promise().query(
-            'SELECT id_usuario, nombre, identificacion, correo, telefono, created_at, updated_at FROM usuarios ORDER BY id_usuario DESC'
+            'SELECT id_usuario, nombre, identificacion, correo, telefono FROM usuarios ORDER BY id_usuario ASC'
         )
         res.status(200).json({
         mensaje: 'Lista de usuarios obtenida exitosamente',
@@ -55,5 +55,51 @@ router.get('/', async (req, res) => {
     }
 })
 
+// creo el endpoint de elliminar un dato de la tabla prestamo
+router.delete('/:id', async (req, res) => {
+  const { id } = req.params;
+  // verifico si me esta enviando el id para enviarlo
+  if (!id) return res.status(400).json({ error: 'ID requerido' });
+
+  try {
+    const [result] = await db.promise().query(
+      'DELETE FROM usuarios WHERE id_usuario = ?',
+      [id]
+    );
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: 'Préstamo no encontrado' });
+    }
+
+    res.json({ mensaje: 'Préstamo eliminado correctamente' });
+  } catch (error) {
+    console.error('Error al eliminar préstamo:', error);
+    res.status(500).json({ error: 'Error del servidor' });
+  }
+});
+
+router.put('/:id', async (req, res) => {
+  const { id } = req.params;
+  // verifico si me esta enviando el id para enviarlo
+  if (!id) return res.status(400).json({ error: 'ID requerido' });
+
+  try {
+    const [result] = await db.promise().query(
+      `UPDATE prestamos 
+       SET id_estado = ?, fecha_devolucion = ? 
+       WHERE id_prestamo = ?`
+      [id]
+    );
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: 'Préstamo no encontrado' });
+    }
+
+    res.json({ mensaje: 'Préstamo eliminado correctamente' });
+  } catch (error) {
+    console.error('Error al eliminar préstamo:', error);
+    res.status(500).json({ error: 'Error del servidor' });
+  }
+})
 // Exportamos el router para usarlo en el index.js
 export default router

@@ -1,36 +1,12 @@
 // Importamos la librería xlsx para poder leer archivos Excel
 import * as XLSX from 'xlsx';
 import axios from 'axios';
-import { router } from './router.js'
 
 
-// Initialize router when DOM is fully loaded
-window.addEventListener('DOMContentLoaded', router);
-// Handle route changes when user navigates using hash
-window.addEventListener('hashchange', router);
-
-// Variable para guardar el archivo seleccionado por el usuario
-let archivoSeleccionado = null;
-
-const from = document.getElementById('fromExel')
-
-from.addEventListener('submit',(e)=>{
-  e.preventDefault()
-
-  const inputArchivo = document.getElementById('excelInput');
-  archivoSeleccionado = inputArchivo.files[0]
-  
-  if(!archivoSeleccionado){
-    alert('Por favor selecciona un archivo Excel antes de enviarlo.')
-    return
-  }
-
-  leerExcel(archivoSeleccionado)
-})
 
 
 // Función para leer el contenido del archivo Excel
-function leerExcel(archivo) {
+export function leerExcel(archivo) {
   const lector = new FileReader();
 
   // Cuando se termina de leer el archivo
@@ -84,7 +60,6 @@ function leerExcel(archivo) {
     await enviarDatos('/api/estados', Array.from(estados));
     await enviarDatos('/api/prestamos', prestamos);
 
-    traerDatos();
   };
 
   // Iniciamos la lectura del archivo como ArrayBuffer
@@ -101,5 +76,4 @@ async function enviarDatos(url, datos) {
     console.error(`Error al enviar datos a ${url}:`, error);
   }
 }
-
-document.addEventListener("DOMContentLoaded", traerDatos());
+// Función para cargar usuarios al hacer clic en el botón

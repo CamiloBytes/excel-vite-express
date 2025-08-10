@@ -1,15 +1,17 @@
 //  Importamos el paquete 'mysql2' para poder hablar con MySQL
 import mysql from 'mysql2'
 
-//  Creamos la conexión a la base de datos
+//  Creamos la conexión a la base de datos Clever Cloud
 const db = mysql.createPool({
-    host: 'localhost',         //  Dirección de la base de datos (en este caso, está en tu compu)
-    user: 'root',              //  Usuario de la base de datos (normalmente es 'root')
-    password: 'Qwe.123*',              // Contraseña del usuario (puede estar vacía si no le pusiste)
-    database: 'prestamos_biblioteca', // El nombre de la base de datos que ya creaste
-    connectionLimit:10,             // el maximo numero de coneciones
-    waitForConnections:true,        // si se pasa el limite genera una lista de espera
-    queueLimit:0                    // numero maimo de peticiones 
+    host: 'ba5rgjivhubweomt5cwb-mysql.services.clever-cloud.com',
+    user: 'uzxp16mr7s5cizkx',
+    password: 'pRKtFIkcXSbGbJww3zSf',
+    database: 'ba5rgjivhubweomt5cwb',
+    port: 3306,
+    connectionLimit: 10,
+    waitForConnections: true,
+    queueLimit: 0,
+    ssl: { rejectUnauthorized: false }
 })
 
 

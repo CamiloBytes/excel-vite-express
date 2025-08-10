@@ -1,28 +1,31 @@
-import { home, traerDatos } from "./views";
+import { home, renderPrestamos, renderUsersPage } from "./views.js";
+
 
 
 const routes = {
     "/": home,
-    "/prestamos": traerDatos,
-    "/usuarios": renderRegister,
-    "/dashboard": renderDashboard,
-    "/dashboard/events/create": addEvent,
-    "/dashboard/events/edit/:id": showEditevent,
-    // other routes...
+    "/prestamos": renderPrestamos,
+    "/usuarios": renderUsersPage
 };
 
 export function router() {
-    const hash = location.hash.replace("#", "");
-    // Handle dynamic route for edit event
-    if (hash.startsWith("/dashboard/events/edit/")) {
-        const eventId = hash.split("/").pop();
+    let path = location.pathname;
+    // Normaliza la ruta para que '/' y '' sean lo mismo
+    if (path === '' || path === '/') {
+        path = '/';
+    }
+    // Si tienes rutas dinámicas, puedes manejarlas aquí
+    // Ejemplo: /dashboard/events/edit/:id
+    if (path.startsWith("/dashboard/events/edit/")) {
+        const eventId = path.split("/").pop();
         showEditevent(eventId);
         return;
     }
-    const routeFunction = routes[hash];
+    const routeFunction = routes[path];
     if (routeFunction) {
         routeFunction();
     } else {
-        renderLanding();
+        // Si la ruta no existe, muestra la vista de inicio
+        home();
     }
 }

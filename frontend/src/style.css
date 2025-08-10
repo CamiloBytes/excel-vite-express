@@ -10,21 +10,101 @@
     font-family: Arial, sans-serif;
     line-height: 1.6;
     color: #333;
-    background-color: #f5f5f5;
+    background-color: #c3d3d4;
     padding: 20px;
   }
   
+header{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 20%;
+}
+
   /* Título principal */
   h1 {
     text-align: center;
-    margin-bottom: 30px;
+    margin-bottom: 20px;
     color: #2c3e50;
     font-size: 2rem;
     font-weight: normal;
   }
+
+  ul{
+    display: flex;
+    flex-direction: row;
+    padding: 10px;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  li{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    list-style: none;
+    padding: 10px;
+  }
   
+  #btn-inicio,
+   #btn-prestamos,
+   #btn-usuarios,
+   #btn-recargar{
+    background-color: #697cde;
+    color: white;
+    padding: 4px ;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    width: 100%;
+    transition: background-color 0.3s;
+  }
+  
+  #btn-inicio:hover {
+    background-color: #5b6cde;
+  }
+
+  #btn-prestamos:hover{
+    background-color: #5b6cde;
+  }
+
+  #btn-usuarios:hover{
+    background-color: #5b6cde;
+  }
+  #btn-recargar:hover{
+    background-color: #5b6cde;
+  }
+  
+  #btn-inicio:active {
+    transform: translateY(1px);
+  }
+
+  #btn-prestamos:active{
+    transform: translateY(1px);
+  }
+
+  #btn-usuarios:active{
+   transform: translateY(1px);
+  }
+  #btn-recargar:active{
+    transform: translateY(1px);
+  }
+
+
+ 
+
   /* Formulario de carga */
-  #fromExel {
+
+  main{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  #fromExcel {
     background: white;
     padding: 20px;
     border-radius: 8px;

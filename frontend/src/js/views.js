@@ -9,20 +9,25 @@ export function home() {
     const home = document.getElementById('app')
     home.innerHTML = `
     <section>
-      <h1>Bienvenido a la Biblioteca</h1>
+    <header class = "header">
+        <h1>Bienvenido a la Biblioteca</h1>
         <p>Utiliza el menú para navegar entre las diferentes secciones.</p>
        <nav>
         <ul>
-            <button id="btn-inicio">Inicio</button>
-            <button id="btn-prestamos">Préstamos</button>
-            <button id="btn-usuarios">Usuarios</button>        
+            <li><button id="btn-inicio">Inicio</button></li>
+            <li><button id="btn-prestamos">Préstamos</button></li>
+            <li><button id="btn-usuarios">Usuarios</button></li>        
         </ul>
       </nav>
-      <h2>Leer desde Excel</h2>
+    </header>
+      <main class="main">
+        <h2>Leer desde Excel</h2>
        <form id="fromExcel">
             <input type="file" id="excelInput" accept=".xlsx, .xls" />
-            <button >Leer Excel</button>
+            <button id="btnFrom" >Leer Excel</button>
         </from>
+      </main>
+      
     </section>
 `
 
@@ -73,12 +78,16 @@ export function renderUsersPage(e) {
     const app = document.getElementById('app');
     app.innerHTML = `
     <section>
-      <h1>Usuarios</h1>
-      <li>
-        <button id="btn-recargar">Recargar</button>
-        <button id="btn-inicio">Inicio</button>
-        <button id="btn-prestamos">Usuarios</button>
-      </li>
+      <header class = "header">
+         <h1>Usuarios</h1>
+       <nav>
+        <ul>
+            <li><button id="btn-inicio">Inicio</button></li>
+            <li><button id="btn-prestamos">Prestamos</button></li> 
+            <li><button id="btn-recargar">Recargar</button></li>    
+        </ul>
+      </nav>
+    </header>
          
       <div style="overflow:auto; margin-top:12px;">
         <table id="tabla-usuarios" border="1" cellpadding="6" cellspacing="0">
@@ -202,12 +211,16 @@ export function renderPrestamos(e) {
     const app = document.getElementById('app');
     app.innerHTML = `
     <section>
-      <h1>Prestamos</h1>
-     <li>
-        <button id="btn-recargar">Recargar</button>
-        <button id="btn-inicio">Inicio</button>
-        <button id="btn-usuario">Usuarios</button>
-      </li>
+     <header class = "header">
+         <h1>Usuarios</h1>
+       <nav>
+        <ul>
+            <li><button id="btn-inicio">Inicio</button></li>
+            <li><button id="btn-usuarios">Usuarios</button></li> 
+            <li><button id="btn-recargar">Recargar</button></li>    
+        </ul>
+      </nav>
+    </header>
       <div style="overflow:auto; margin-top:12px;">
        <table id="tabla-prestamos" border="1" cellpadding="6" cellspacing="0">
     <thead>
@@ -240,7 +253,7 @@ export function renderPrestamos(e) {
     const tbody = app.querySelector('#tabla-prestamos tbody');
     const btnRecargar = app.querySelector('#btn-recargar');
     const btnInicio = app.querySelector('#btn-inicio');
-    const btnUsuario = app.querySelector('#btn-usuario');
+    const btnUsuario = app.querySelector('#btn-usuarios');
     btnInicio.addEventListener('click', (e) => {
         e.preventDefault();
         history.pushState({}, '', '/');

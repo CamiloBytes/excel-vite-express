@@ -4,47 +4,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="src/style.css">
   <title>Biblioteca</title>
+  <link rel="stylesheet" href="./src/style.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
 </head>
 
 <body>
-  <!-- Un título para la página -->
-  <h1>Cargar archivo</h1>
-  <form action="" id="fromExel">
-    <!-- Input donde el usuario puede seleccionar un archivo Excel -->
-    <input type="file" id="excelInput" accept=".xlsx, .xls" />
-    <!--Button para enviar el archivo cargado anteriormente-->
-    <button id="btnFrom">Enviar Datos</button>
-  </form>
-  <!--TABLA DONDE SE CARGAN LOS DATOS DEL BACKEND-->
-  <table border="1">
-    <thead>
-      <tr>
-        <th>ID Préstamo</th>
-        <th>Nombre Usuario</th>
-        <th>Identificación</th>
-        <th>Email</th>
-        <th>Teléfono</th>
-        <th>Título del Libro</th>
-        <th>ISBN</th>
-        <th>Año Publicación</th>
-        <th>Autor</th>
-        <th>Fecha Préstamo</th>
-        <th>Fecha Devolución</th>
-        <th>Estado</th>
-        <th>Eliminar</th>
-        <th>Actualizar</th>
-      </tr>
-    </thead>
-    <tbody id="tabla">
-      <!-- Aquí van las filas -->
-    </tbody>
-  </table>
-  
-  <!-- Este script es el que maneja todo en el frontend -->
-  <!-- Usamos type="module" para poder usar import/export -->
-  <script type="module" src="./src/js/main.js"></script>
+  <main id="app"></main>
 </body>
-
+<script type="module" src="./src/js/main.js"></script>
 </html>

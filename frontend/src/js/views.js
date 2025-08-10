@@ -6,8 +6,11 @@ export function home (){
 
 }
 
-export function renderUsersPage(container) {
-  container.innerHTML = `
+// Esta funcion es para renderisar la tabla de los usuarios
+export function renderUsersPage() {
+  
+  const app = document.getElementById('app');
+    app.innerHTML = `
     <section>
       <h1>Usuarios</h1>
       <button id="btn-recargar">Recargar</button>
@@ -32,8 +35,8 @@ export function renderUsersPage(container) {
     </section>
   `
 
-  const tbody = container.querySelector('#tabla-usuarios tbody')
-  const btnRecargar = container.querySelector('#btn-recargar')
+  const tbody = app.querySelector('#tabla-usuarios tbody')
+  const btnRecargar = app.querySelector('#btn-recargar')
 
   async function cargarUsuarios() {
     tbody.innerHTML = `<tr><td colspan="7">Cargando...</td></tr>`
@@ -63,7 +66,6 @@ export function renderUsersPage(container) {
 
         tabla.appendChild(fila);
     })
-        .join('')
     } catch (e) {
       console.error('Error cargando usuarios:', e)
       tbody.innerHTML = `<tr><td colspan="7">Error cargando datos</td></tr>`
@@ -74,22 +76,62 @@ export function renderUsersPage(container) {
   cargarUsuarios()
 }
 
-export async function traerDatos() {
+export function renderPrestamos() {
+   
+      const app = document.getElementById('app');
+    app.innerHTML = `
+    <section>
+      <h1>Prestamos</h1>
+      <button id="btn-recargar">Recargar</button>
+      <div style="overflow:auto; margin-top:12px;">
+       <table id="tabla-prestamos" border="1" cellpadding="6" cellspacing="0">
+    <thead>
+        <tr>
+        <th>ID Préstamo</th>
+        <th>Nombre Usuario</th>
+        <th>Identificación</th>
+        <th>Correo</th>
+        <th>Teléfono</th>
+        <th>Título Libro</th>
+        <th>ISBN</th>
+        <th>Año Publicación</th>
+        <th>Autor</th>
+        <th>Fecha Préstamo</th>
+        <th>Fecha Devolución</th>
+        <th>Estado Préstamo</th>
+        <th>Creado</th>
+        <th>Actualizado</th>
+        <th>Acciones</th>
+        </tr>
+    </thead>
+  <tbody>
+    <tr><td colspan="15">Cargando...</td></tr>
+  </tbody>
+</table>
+      </div>
+    </section>
+  `
+
+const tbody = app.querySelector('#tabla-prestamos tbody');
+const btnRecargar = app.querySelector('#btn-recargar');
+   
+async function traerDatos() {
+   tbody.innerHTML = `<tr><td colspan="15">Cargando...</td></tr>`;
     try {
-        // Llamo a la API
+
         const { data } = await axios.get(endPointPrestamo);
 
         const prestamos = data.prestamos_encontrados;
 
-        if (!Array.isArray(prestamos)) {
+        if (!Array.isArray(prestamos) || prestamos.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="15">Sin datos</td></tr>`;
             console.error("El backend no devolvió un array válido:", prestamos);
             return;
         }
 
         console.log(prestamos); // Verificación en consola
 
-        const tabla = document.getElementById('tabla');
-        tabla.innerHTML = ''; // Limpio tabla
+        tbody.innerHTML = ''; // Limpio tabla
 
         prestamos.forEach(prestamo => {
             const fila = document.createElement('tr');
@@ -111,9 +153,9 @@ export async function traerDatos() {
                 <td><button class="btn-actualizar" data-id="${prestamo.id_del_prestamo}">Actualizar</button></td>
             `;
 
-            tabla.appendChild(fila);
+            tbody.appendChild(fila);
         });
-
+        
         // Botones Eliminar
         document.querySelectorAll('.btn-eliminar').forEach(boton => {
             boton.addEventListener('click', async () => {
@@ -129,7 +171,7 @@ export async function traerDatos() {
                 }
             });
         });
-
+        
         // Botones Actualizar
         document.querySelectorAll('.btn-actualizar').forEach(boton => {
             boton.addEventListener('click', async () => {
@@ -147,4 +189,6 @@ export async function traerDatos() {
     } catch (error) {
         console.error('Error al obtener préstamos:', error.message);
     }
+}
+
 }

@@ -5,10 +5,10 @@ import express from 'express'
 import cors from 'cors'
 
 // Importamos los archivos que tienen las rutas de cada tabla
-import usuariosRoutes from './routes/usuarios.js'
-import librosRoutes from './routes/libros.js'
-import estadosRoutes from './routes/estados.js'
-import prestamosRoutes from './routes/prestamos.js'
+import usuariosRoutes from './routes/usuarios.routes.js'
+import librosRoutes from './routes/libros.routes.js'
+import estadosRoutes from './routes/estados.routes.js'
+import prestamosRoutes from './routes/prestamos.routes.js'
 
 // Creamos la aplicación de Express (esto es como el servidor en sí)
 const app = express()
@@ -19,11 +19,9 @@ app.use(cors())
 // Le decimos al servidor que entienda datos en formato JSON (para recibir datos del Excel en el frontend)
 app.use(express.json())
 
-// Configuramos las rutas para que cuando alguien acceda a /api/usuarios, se use el archivo correspondiente
-
-
+// Configuramos las rutas para que cuando alguien acceda a /api/... se use el archivo correspondiente
 app.use('/api/usuarios', usuariosRoutes)
-app.use('/api/libros', librosRoutes)
+app.use('/api/libros', librosRoutes)      // ✅ Ruta de libros conectada al nuevo controller y model
 app.use('/api/estados', estadosRoutes)
 app.use('/api/prestamos', prestamosRoutes)
 

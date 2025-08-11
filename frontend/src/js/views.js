@@ -9,45 +9,44 @@ export function home() {
     const home = document.getElementById('app')
     home.innerHTML = `
     <section>
-    <header class = "header">
-        <h1>Bienvenido a la Biblioteca</h1>
-        <p>Utiliza el menú para navegar entre las diferentes secciones.</p>
-       <nav>
-        <ul>
-            <li><button id="btn-inicio">Inicio</button></li>
-            <li><button id="btn-prestamos">Préstamos</button></li>
-            <li><button id="btn-usuarios">Usuarios</button></li>        
-        </ul>
-      </nav>
-    </header>
-      <main class="main">
-        <h2>Leer desde Excel</h2>
-       <form id="fromExcel">
-            <input type="file" id="excelInput" accept=".xlsx, .xls" />
-            <button id="btnFrom" >Leer Excel</button>
-        </from>
-      </main>
-      
+        <header class = "header">
+            <h1>Bienvenido a la Biblioteca</h1>
+            <p>Utiliza el menú para navegar entre las diferentes secciones.</p>
+            <nav>
+                <ul>
+                    <li><button id="btn-inicio">Inicio</button></li>
+                    <li><button id="btn-prestamos">Préstamos</button></li>
+                    <li><button id="btn-usuarios">Usuarios</button></li>        
+                </ul>
+            </nav>
+        </header>
+        <main class="main">
+            <h2>Leer desde Excel</h2>
+            <form id="fromExcel">
+                <input type="file" id="excelInput" accept=".xlsx, .xls" />
+                <button id="btnFrom" >Leer Excel</button>
+            </from>
+        </main>
     </section>
 `
 
     // Variable para guardar el archivo seleccionado por el usuario
     let archivoSeleccionado = null;
-    
-    const from =document.getElementById('fromExcel')
-    
-    from.addEventListener('submit',(e)=>{
-      e.preventDefault()
-    
-      const inputArchivo = document.getElementById('excelInput');
-      archivoSeleccionado = inputArchivo.files[0]
-      
-      if(!archivoSeleccionado){
-        alert('Por favor selecciona un archivo Excel antes de enviarlo.')
-        return
-      }
-      // llamo a la funcion leerExcel para procesar el archivo 
-      leerExcel(archivoSeleccionado)
+
+    const from = document.getElementById('fromExcel')
+
+    from.addEventListener('submit', (e) => {
+        e.preventDefault()
+
+        const inputArchivo = document.getElementById('excelInput');
+        archivoSeleccionado = inputArchivo.files[0]
+
+        if (!archivoSeleccionado) {
+            alert('Por favor selecciona un archivo Excel antes de enviarlo.')
+            return
+        }
+        // llamo a la funcion leerExcel para procesar el archivo 
+        leerExcel(archivoSeleccionado)
     })
 
     // Selecciono los botones del menú
@@ -72,49 +71,64 @@ export function home() {
     });
 
 }
+
+// Función para formatear fechas en YYYY-MM-DD sin la hora
+function formatDate(dateString) {
+    if (!dateString) return ''
+    const date = new Date(dateString);
+    if (isNaN(date)) return '';
+
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // Mes 0-11
+    const day = String(date.getDate()).padStart(2, '0');
+
+    return `${year}-${month}-${day}`;
+}
+
+
+
 // Esta funcion es para renderisar la tabla de los usuarios
 export function renderUsersPage(e) {
     e?.preventDefault(); // Evitar el comportamiento por defecto del botón si es necesario  
     const app = document.getElementById('app');
     app.innerHTML = `
     <section>
-      <header class = "header">
-         <h1>Usuarios</h1>
-       <nav>
-        <ul>
-            <li><button id="btn-inicio">Inicio</button></li>
-            <li><button id="btn-prestamos">Prestamos</button></li> 
-            <li><button id="btn-recargar">Recargar</button></li>    
-        </ul>
-      </nav>
+    <header class = "header">
+            <h1>Usuarios</h1>
+        <nav>
+            <ul>
+                <li><button id="btn-inicio">Inicio</button></li>
+                <li><button id="btn-prestamos">Prestamos</button></li> 
+                <li><button id="btn-recargar">Recargar</button></li>    
+            </ul>
+        </nav>
     </header>
-         
-      <div style="overflow:auto; margin-top:12px;">
+    <div style="overflow:auto; margin-top:12px;">
         <table id="tabla-usuarios" border="1" cellpadding="6" cellspacing="0">
-          <thead>
+        <thead>
             <tr>
-              <th>ID</th>
-              <th>Nombre</th>
-              <th>Identificación</th>
-              <th>Correo</th>
-              <th>Teléfono</th>
-              <th>Creado</th>
-              <th>Actualizado</th>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Identificación</th>
+                <th>Correo</th>
+                <th>Teléfono</th>
+                <th>Creado</th>
+                <th>Actualizado</th>
             </tr>
-          </thead>
-          <tbody>
+        </thead>
+        <tbody>
             <tr><td colspan="7">Cargando...</td></tr>
-          </tbody>
+        </tbody>
         </table>
-      </div>
+    </div>
     </section>
-  `
+    `
     // Selecciono los elementos del DOM
     const tbody = app.querySelector('#tabla-usuarios tbody')
     const btnRecargar = app.querySelector('#btn-recargar')
     const btnInicio = app.querySelector('#btn-inicio');
     const btnPrestamos = app.querySelector('#btn-prestamos');
-    
+
     btnInicio.addEventListener('click', (e) => {
         e.preventDefault();
         history.pushState({}, '', '/');
@@ -211,44 +225,44 @@ export function renderPrestamos(e) {
     const app = document.getElementById('app');
     app.innerHTML = `
     <section>
-     <header class = "header">
-         <h1>Usuarios</h1>
-       <nav>
-        <ul>
-            <li><button id="btn-inicio">Inicio</button></li>
-            <li><button id="btn-usuarios">Usuarios</button></li> 
-            <li><button id="btn-recargar">Recargar</button></li>    
-        </ul>
-      </nav>
-    </header>
-      <div style="overflow:auto; margin-top:12px;">
-       <table id="tabla-prestamos" border="1" cellpadding="6" cellspacing="0">
-    <thead>
-        <tr>
-        <th>ID Préstamo</th>
-        <th>Nombre Usuario</th>
-        <th>Identificación</th>
-        <th>Correo</th>
-        <th>Teléfono</th>
-        <th>Título Libro</th>
-        <th>ISBN</th>
-        <th>Año Publicación</th>
-        <th>Autor</th>
-        <th>Fecha Préstamo</th>
-        <th>Fecha Devolución</th>
-        <th>Estado Préstamo</th>
-        <th>Creado</th>
-        <th>Actualizado</th>
-        
-        </tr>
-    </thead>
-  <tbody>
+        <header class = "header">
+            <h1>Usuarios</h1>
+            <nav>
+            <ul>
+                <li><button id="btn-inicio">Inicio</button></li>
+                <li><button id="btn-usuarios">Usuarios</button></li> 
+                <li><button id="btn-recargar">Recargar</button></li>    
+            </ul>
+            </nav>
+        </header>
+    <div style="overflow:auto; margin-top:12px;">
+        <table id="tabla-prestamos" border="1" cellpadding="6" cellspacing="0">
+        <thead>
+            <tr>
+            <th>ID Préstamo</th>
+            <th>Nombre Usuario</th>
+            <th>Identificación</th>
+            <th>Correo</th>
+            <th>Teléfono</th>
+            <th>Título Libro</th>
+            <th>ISBN</th>
+            <th>Año Publicación</th>
+            <th>Autor</th>
+            <th>Fecha Préstamo</th>
+            <th>Fecha Devolución</th>
+            <th>Estado Préstamo</th>
+            <th>Creado</th>
+            <th>Actualizado</th>
+
+            </tr>
+        </thead>
+    <tbody>
     <tr><td colspan="15">Cargando...</td></tr>
-  </tbody>
-</table>
-      </div>
+    </tbody>
+    </table>
+    </div>
     </section>
-  `
+    `
 
     const tbody = app.querySelector('#tabla-prestamos tbody');
     const btnRecargar = app.querySelector('#btn-recargar');
@@ -297,8 +311,8 @@ export function renderPrestamos(e) {
                 <td>${prestamo.codigo_isbn}</td>
                 <td>${prestamo.año_de_publicacion}</td>
                 <td>${prestamo.autor_del_libro}</td>
-                <td>${prestamo.fecha_de_prestamo}</td>
-                <td>${prestamo.fecha_de_devolucion}</td>
+                <td>${formatDate(prestamo.fecha_de_prestamo)}</td>
+                <td>${formatDate(prestamo.fecha_de_devolucion)}</td>
                 <td>${prestamo.estado_del_prestamo}</td>
                 <td><button class="btn-eliminar" data-id="${prestamo.id_del_prestamo}">Eliminar</button></td>
                 <td><button class="btn-actualizar" data-id="${prestamo.id_del_prestamo}">Actualizar</button></td>
@@ -308,7 +322,7 @@ export function renderPrestamos(e) {
             });
 
             // Botones Eliminar
-           document.querySelectorAll('.btn-eliminar').forEach(boton => {
+            document.querySelectorAll('.btn-eliminar').forEach(boton => {
                 boton.addEventListener('click', async (e) => {
                     e.preventDefault();
                     e.stopPropagation();

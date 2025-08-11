@@ -13,7 +13,6 @@ const db = mysql.createPool({
     queueLimit: 0
 })
 
-
 // Verificamos si la conexión funciona correctamente
 db.getConnection((error, connection) => {
     if (error) {

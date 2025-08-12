@@ -1,36 +1,26 @@
 // Importamos el router de express y la conexión a la base de datos
 import { Router } from 'express'
 import db from '../db.js'
+import { format, isValid } from 'date-fns'
 
 const router = Router()
 
 // Utilidades para normalizar fechas provenientes de Excel o strings
-const EXCEL_EPOCH_MS = Date.UTC(1899, 11, 30)
-function convertExcelSerialToISO(serial) {
-  if (typeof serial !== 'number' || !isFinite(serial)) return null
-  const ms = EXCEL_EPOCH_MS + Math.round(serial) * 86400000
-  return new Date(ms).toISOString().slice(0, 10)
-}
-function normalizeDateInput(input) {
+
+
+// Reemplazo simple de tu función actual
+export function normalizeDateInput(input) {
   if (input == null || input === '') return null
-  if (typeof input === 'number') return convertExcelSerialToISO(input)
-  if (typeof input === 'string') {
-    const trimmed = input.trim()
-    if (/^\d{4}-\d{2}-\d{2}$/.test(trimmed)) return trimmed
-    const ddmmyyyy = trimmed.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/)
-    if (ddmmyyyy) {
-      const dd = parseInt(ddmmyyyy[1], 10)
-      const mm = parseInt(ddmmyyyy[2], 10)
-      const yyyy = parseInt(ddmmyyyy[3], 10)
-      if (mm >= 1 && mm <= 12 && dd >= 1 && dd <= 31) {
-        return `${yyyy}-${String(mm).padStart(2, '0')}-${String(dd).padStart(2, '0')}`
-      }
-    }
-    const parsed = new Date(trimmed)
-    if (!isNaN(parsed.getTime())) return parsed.toISOString().slice(0, 10)
+  
+  try {
+    const date = typeof input === 'number' 
+      ? new Date((input - 25569) * 86400 * 1000) // Excel serial
+      : new Date(input) // String o Date object
+    
+    return isValid(date) ? format(date, 'yyyy-MM-dd') : null
+  } catch {
     return null
   }
-  return null
 }
 
 router.post('/', async (req, res) => {

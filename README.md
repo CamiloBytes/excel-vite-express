@@ -1,8 +1,11 @@
+
 # excel-vite-express
 
-Este proyecto es una aplicación de gestión de biblioteca que permite cargar datos desde archivos Excel, visualizar y administrar usuarios, libros, préstamos y estados. Utiliza Express para el backend y Vite para el frontend.
+## System Description
 
-## Estructura de carpetas
+excel-vite-express is a library management system that allows you to upload data from Excel/CSV files, view and manage users, books, loans, and states. The backend is built with Express and MySQL, and the frontend uses Vite and vanilla JavaScript.
+
+## Folder Structure
 
 ```
 excel-vite-express/
@@ -30,44 +33,76 @@ excel-vite-express/
 │   │       └── views.js
 ```
 
-## Requisitos
+## Technologies Used
 
 - Node.js
-- npm
+- Express.js
+- MySQL (Clever Cloud)
+- Vite
+- JavaScript (ES6)
+- SweetAlert2
+- Axios
+- XLSX (SheetJS)
 
-## Instalación
+## How to Run the Project
 
-1. Clona el repositorio y entra en la carpeta principal.
-2. Instala las dependencias del backend:
+1. Clone the repository and enter the main folder.
+2. Install backend dependencies:
    ```sh
    cd backend
    npm install
    ```
-3. Instala las dependencias del frontend:
+3. Install frontend dependencies:
    ```sh
    cd ../frontend
    npm install
    ```
+4. Configure your database connection in `backend/db.js` with your Clever Cloud credentials.
 
-## Ejecución
+### Start Backend
 
-### Backend
-
-Desde la carpeta `backend`:
+From the `backend` folder:
 ```sh
 npm run server
 ```
-El backend se ejecuta en [http://localhost:3000](http://localhost:3000)
+Backend runs at [http://localhost:3000](http://localhost:3000)
 
-### Frontend
+### Start Frontend
 
-Desde la carpeta `frontend`:
+From the `frontend` folder:
 ```sh
 npm run dev
 ```
-El frontend se ejecuta en [http://localhost:5173](http://localhost:5173) por defecto.
+Frontend runs at [http://localhost:5173](http://localhost:5173) by default.
 
-## Notas
+## Database Normalization
 
-- Configura la conexión a la base de datos en `backend/db.js` según tus credenciales.
-- Para cargar datos desde Excel, usa la opción en la pantalla principal del frontend.
+The database is normalized to third normal form (3NF):
+- Each table has a primary key.
+- Foreign keys are used to relate users, books, states, and loans.
+- Redundant data is minimized and integrity is enforced with constraints and checks.
+
+## Bulk Upload from CSV
+
+To upload data in bulk:
+1. Go to the main screen in the frontend.
+2. Use the upload option to select your Excel or CSV file.
+3. The system parses and sends the data to the backend, which inserts it into the database.
+
+## Advanced Queries
+
+The backend supports advanced queries such as:
+- Listing all active loans with user and book details.
+- Filtering books by author or publication year.
+- Aggregating statistics (e.g., total loans per user).
+- Searching users by identification or email.
+
+## Relational Model Screenshot
+
+See `docs/Copia de Copia de Diagrama sin título.drawio.svg` for the full relational model.
+
+## Developer Information
+
+- Name: camilo
+- Clan: cienaga
+- Email: camiloandres02222@gmail.com

@@ -10,7 +10,7 @@ const router = express.Router()
 // Ruta POST: esta recibe los usuarios que vienen del frontend
 router.post('/', async (req, res) => {
     try {
-        const usuarios = req.body //  Recibimos el arreglo de usuarios
+        const usuarios = Array.isArray(req.body) ? req.body : [req.body]
 
         for (const u of usuarios) {
             // Revisamos si ya existe un usuario con esa identificación o correo
@@ -85,26 +85,50 @@ router.delete('/:id', async (req, res) => {
 });
 
 router.put('/:id', async (req, res) => {
-  const { id } = req.params;
-  // verifico si me esta enviando el id para enviarlo
-  if (!id) return res.status(400).json({ error: 'ID requerido' });
+  const { id } = req.params
+  const { nombre, identificacion, correo, telefono } = req.body || {}
+
+  if (!id) return res.status(400).json({ error: 'ID requerido' })
+
+  // Construcción dinámica de los campos a actualizar
+  const campos = []
+  const valores = []
+
+  if (typeof nombre === 'string' && nombre.trim() !== '') {
+    campos.push('nombre = ?')
+    valores.push(nombre.trim())
+  }
+  if (typeof identificacion === 'string' && identificacion.trim() !== '') {
+    campos.push('identificacion = ?')
+    valores.push(identificacion.trim())
+  }
+  if (typeof correo === 'string' && correo.trim() !== '') {
+    campos.push('correo = ?')
+    valores.push(correo.trim())
+  }
+  if (typeof telefono === 'string' && telefono.trim() !== '') {
+    campos.push('telefono = ?')
+    valores.push(telefono.trim())
+  }
+
+  if (campos.length === 0) {
+    return res.status(400).json({ error: 'No hay campos válidos para actualizar' })
+  }
 
   try {
-    const [result] = await db.promise().query(
-      `UPDATE prestamos 
-       SET id_estado = ?, fecha_devolucion = ? 
-       WHERE id_prestamo = ?`
-      [id]
-    );
+    const sql = `UPDATE usuarios SET ${campos.join(', ')} WHERE id_usuario = ?`
+    valores.push(id)
+
+    const [result] = await db.promise().query(sql, valores)
 
     if (result.affectedRows === 0) {
-      return res.status(404).json({ error: 'Préstamo no encontrado' });
+      return res.status(404).json({ error: 'Usuario no encontrado' })
     }
 
-    res.json({ mensaje: 'Préstamo eliminado correctamente' });
+    res.json({ mensaje: 'Usuario actualizado correctamente' })
   } catch (error) {
-    console.error('Error al eliminar préstamo:', error);
-    res.status(500).json({ error: 'Error del servidor' });
+    console.error('Error al actualizar usuario:', error)
+    res.status(500).json({ error: 'Error del servidor' })
   }
 })
 // Exportamos el router para usarlo en el index.js

@@ -3,3 +3,4 @@
 export const endPointPrestamo = 'http://localhost:3000/api/prestamos'
 // endpoint de usuarios
 export const endPointUsuarios= 'http://localhost:3000/api/usuarios'
+export const endPointEstados = 'http://localhost:3000/api/estados'

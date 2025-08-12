@@ -11,7 +11,7 @@ const router = express.Router()
 router.post('/', async (req, res) => {
     try {
         //  Recibimos el arreglo de libros que viene en el cuerpo de la petición
-        const libros = req.body
+        const libros = Array.isArray(req.body) ? req.body : [req.body]
 
         //  Recorremos cada libro recibido
         for (const libro of libros) {
